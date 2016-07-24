@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
 import { Tasks } from '../api/tasks.js';
@@ -36,10 +37,15 @@ Template.body.events({
     const target = event.target;
     const text = target.text.value;
 
+    //Insert a task into the collection
+    Meteor.call('tasks.insert', text);
+
     // Insert a task into the collection
     Tasks.insert({
       text,
       createdAt: new Date(), // current time
+      owner: Meteor.userId(),
+      username: Meteor.user().username,
     });
 
     // Clear form
